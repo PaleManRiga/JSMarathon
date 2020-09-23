@@ -1,27 +1,34 @@
-const str = "мама мыла раму";
-const str2 = "собака друг человека";
+const firstCustom = prompt("Enter sentence");
+const secondCustom = prompt("Enter second sentence");
+const searchLetter = prompt("Enter letter to count");
+let result;
 
-function getRow(firstRow, secondRow){
+function getRow(firstRow, secondRow) {
     let firstCounter = 0;
     let secondCounter = 0;
-    for (let i = 0; i < firstRow.length; i++){
-        if(firstRow.charAt(i) === "а"){
+    for (let i = 0; i < firstRow.length; i++) {
+        if (firstRow.charAt(i) === searchLetter) {
             firstCounter++;
         }
     }
-    for (let i = 0; i < secondRow.length; i++){
-        if(secondRow.charAt(i) === "а"){
+    for (let i = 0; i < secondRow.length; i++) {
+        if (secondRow.charAt(i) === searchLetter) {
             secondCounter++;
         }
     }
-    if(firstCounter > secondCounter){
-        console.log("first row has more letters a")
-    } else if (firstCounter < secondCounter){
-        console.log("second row has more letters a")
+    if (firstCounter > secondCounter) {
+        result = firstCustom + "\n" + "first row has more letters " + searchLetter;
+    } else if (firstCounter < secondCounter) {
+        result = secondCustom + "\n" +  "second row has more letters " + searchLetter;
     }
-    if(firstCounter === secondCounter){
-        console.log("a letters amount is equal")
+    if (firstCounter === secondCounter) {
+        result = searchLetter + " letters amount is equal";
+    }
+    if (firstCounter === 0 && secondCounter === 0 ){
+        result = "There is no letters you asked to count"
     }
 }
 
-console.log(getRow(str, str2));
+console.log(getRow(firstCustom, secondCustom));
+
+alert(result);
