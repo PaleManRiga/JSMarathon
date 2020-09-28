@@ -1,34 +1,58 @@
-const firstCustom = prompt("Enter sentence");
-const secondCustom = prompt("Enter second sentence");
-const searchLetter = prompt("Enter letter to count");
-let result;
-
-function getRow(firstRow, secondRow) {
-    let firstCounter = 0;
-    let secondCounter = 0;
-    for (let i = 0; i < firstRow.length; i++) {
-        if (firstRow.charAt(i) === searchLetter) {
-            firstCounter++;
-        }
-    }
-    for (let i = 0; i < secondRow.length; i++) {
-        if (secondRow.charAt(i) === searchLetter) {
-            secondCounter++;
-        }
-    }
-    if (firstCounter > secondCounter) {
-        result = firstCustom + "\n" + "first row has more letters " + searchLetter;
-    } else if (firstCounter < secondCounter) {
-        result = secondCustom + "\n" +  "second row has more letters " + searchLetter;
-    }
-    if (firstCounter === secondCounter) {
-        result = searchLetter + " letters amount is equal";
-    }
-    if (firstCounter === 0 && secondCounter === 0 ){
-        result = "There is no letters you asked to count"
-    }
+const btn = document.getElementById('btn-kick');
+const character = {
+    name: 'Pikachu',
+    defaultHP: 100,
+    damageHP: 100,
+    elHP: document.getElementById('health-character'),
+    elProgressbar: document.getElementById('progressbar-character'),
 }
 
-console.log(getRow(firstCustom, secondCustom));
+const enemy = {
+    name: 'Charmander',
+    defaultHP: 100,
+    damageHP: 100,
+    elHP: document.getElementById('health-enemy'),
+    elProgressbar: document.getElementById('progressbar-enemy'),
+}
+btn.addEventListener('click', function () {
+    console.log('Kick');
+    changeHP(random(20), character);
+    changeHP(random(20), enemy);
+})
 
-alert(result);
+function init() {
+    console.log('Start Game!');
+    renderHP(character);
+    renderHP(enemy);
+
+}
+
+function renderHPLife(person) {
+    person.elHP.innerText = person.damageHP + '/' + person.defaultHP;
+}
+
+function renderProgressbarHP(person) {
+    person.elProgressbar.style.width = person.damageHP + '%'
+}
+
+function renderHP(person) {
+    renderHPLife(person);
+    renderProgressbarHP(person);
+}
+
+function changeHP(count, person) {
+    if (person.damageHP < count) {
+        person.damageHP = 0;
+        alert('Бедный ' + person.name + ' проиграл бой');
+        btn.disabled = true;
+    } else {
+        person.damageHP -= count;
+        
+    }
+    renderHP(person);
+}
+
+function random(num) {
+    return Math.ceil(Math.random() * num);
+}
+init();
