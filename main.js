@@ -1,4 +1,5 @@
 const btn = document.getElementById('btn-kick');
+const tacklebtn = document.getElementById('btn-tackle');
 
 function renderProgressbarHP() {
     this.elProgressbar.style.width = (this.damageHP / this.defaultHP) * 100 + '%'
@@ -51,6 +52,10 @@ btn.addEventListener('click', function () {
     console.log('Kick');
     character.changeHP(random(20));
     enemy.changeHP(random(20));
+})
+tacklebtn.addEventListener('click', function() {
+    console.log('Tackle');
+    enemy.changeHP(5);
 })
 
 function init() {
