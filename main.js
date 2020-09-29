@@ -9,8 +9,8 @@ function renderHPLife() {
 }
 
 function renderHP() {
-    this.renderHPLife;
-    this.renderProgressbarHP;
+    this.renderHPLife();
+    this.renderProgressbarHP();
 }
 
 function changeHP(count) {
@@ -22,9 +22,8 @@ function changeHP(count) {
        this.damageHP -= count;
 
     }
-    this.renderHP;
+    this.renderHP();
 }
-
 const character = {
     name: 'Pikachu',
     defaultHP: 100,
