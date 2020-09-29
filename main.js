@@ -1,7 +1,7 @@
 const btn = document.getElementById('btn-kick');
 
-function renderProgressbarHP () {
-    this.elProgressbar.style.width = this.damageHP + '%'
+function renderProgressbarHP() {
+    this.elProgressbar.style.width = (this.damageHP / this.defaultHP) * 100 + '%'
 }
 
 function renderHPLife() {
@@ -19,15 +19,15 @@ function changeHP(count) {
         alert('Бедный ' + this.name + ' проиграл бой');
         btn.disabled = true;
     } else {
-       this.damageHP -= count;
+        this.damageHP -= count;
 
     }
     this.renderHP();
 }
 const character = {
     name: 'Pikachu',
-    defaultHP: 100,
-    damageHP: 100,
+    defaultHP: 200,
+    damageHP: 200,
     elHP: document.getElementById('health-character'),
     elProgressbar: document.getElementById('progressbar-character'),
     renderProgressbarHP: renderProgressbarHP,
@@ -38,8 +38,8 @@ const character = {
 
 const enemy = {
     name: 'Charmander',
-    defaultHP: 100,
-    damageHP: 100,
+    defaultHP: 200,
+    damageHP: 200,
     elHP: document.getElementById('health-enemy'),
     elProgressbar: document.getElementById('progressbar-enemy'),
     renderProgressbarHP: renderProgressbarHP,
