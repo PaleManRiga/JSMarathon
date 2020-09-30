@@ -70,7 +70,8 @@ btn.addEventListener('click', function () {
 })
 tacklebtn.addEventListener('click', function () {
     console.log('Tackle');
-    enemy.changeHP(5);
+    enemyDmg=5;
+    enemy.changeHP(enemyDmg);
 })
 function init() {
     console.log('Start Game!');
