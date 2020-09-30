@@ -15,15 +15,15 @@ function renderHP() {
 }
 
 function changeHP(count) {
-    if (this.damageHP < count) {
+    this.damageHP -= count;
+
+    if (this.damageHP <= count) {
         this.damageHP = 0;
         alert('Бедный ' + this.name + ' проиграл бой');
         btn.disabled = true;
         tacklebtn.disabled = true;
-    } else {
-        this.damageHP -= count;
-
     }
+    
     this.renderHP();
 }
 const character = {
@@ -54,7 +54,7 @@ btn.addEventListener('click', function () {
     character.changeHP(random(20));
     enemy.changeHP(random(20));
 })
-tacklebtn.addEventListener('click', function() {
+tacklebtn.addEventListener('click', function () {
     console.log('Tackle');
     enemy.changeHP(5);
 })
