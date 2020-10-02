@@ -476,3 +476,8 @@ h1 {
 .action label {
     padding: 6px 0;
 }
+
+.log{
+    max-height: 200px;
+    overflow: scroll;
+}
