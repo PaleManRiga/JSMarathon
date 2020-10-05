@@ -478,6 +478,12 @@ h1 {
 }
 
 .log{
+    max-width: 800px;
+    width: 100%;
     max-height: 200px;
     overflow: scroll;
+    overflow-x: hidden;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    margin: 0 auto;
 }
