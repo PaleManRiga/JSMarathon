@@ -17,6 +17,7 @@ function renderHP() {
     this.renderHPLife();
     this.renderProgressbarHP();
 }
+
 function changeHP(count) {
     this.damageHP -= count;
 
@@ -63,25 +64,32 @@ const enemy = {
     renderHP: renderHP,
     changeHP: changeHP,
 }
+const btnCountJolt = countClicks(6, btn);
+const btnCountTackle = countClicks(20, tacklebtn);
 
-
-function countClicks() {
-    let counter = 1;
-    // console.log(counter);
+function countClicks(count = 6, el) {
+    const innerText = el.innerText;
+    el.innerText = `${innerText} (${count})`;
     return function () {
-        return counter++;
+        count--;
+        if (count === 0) {
+            el.disabled = true;
+        }
+        el.innerText = `${innerText} (${count})`;
+        return count;
     }
-
 }
 btn.addEventListener('click', function () {
     console.log('Kick');
-    characterDmg = random(20);
-    enemyDmg = random(20);
+    btnCountJolt();
+    characterDmg = random(40, 20);
+    enemyDmg = random(40, 20);
     character.changeHP(characterDmg);
     enemy.changeHP(enemyDmg);
 })
 tacklebtn.addEventListener('click', function () {
     console.log('Tackle');
+    btnCountTackle();
     enemyDmg = 5;
     enemy.changeHP(enemyDmg);
 })
@@ -91,23 +99,10 @@ function init() {
     character.renderHP;
     enemy.renderHP;
 
-    for (let i = 0; i < btns.length; i++) {
-        const clicks = countClicks();
-
-
-        btns[i].addEventListener('click', () => {      
-          const item = clicks();
-          if (item < 10 ) {
-            console.log('Number of hits ' + item);
-          } else {
-            btns[i].disabled = true;
-          }
-        });
-      }
-
 }
-function random(num) {
-    return Math.ceil(Math.random() * num);
+function random(max, min =0) {
+    const num = max - min;
+    return Math.ceil(Math.random() * num) + min;
 }
 
 function generateLog(firstPerson, secondPerson, damageDone, hpLeft, hpDefault) {
