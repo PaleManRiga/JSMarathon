@@ -2,6 +2,8 @@ const btn = document.getElementById('btn-kick');
 const tacklebtn = document.getElementById('btn-tackle');
 let characterDmg = 0;
 let enemyDmg = 0;
+const btns = document.querySelectorAll('button');
+
 
 function renderProgressbarHP() {
     this.elProgressbar.style.width = (this.damageHP / this.defaultHP) * 100 + '%'
@@ -61,6 +63,16 @@ const enemy = {
     renderHP: renderHP,
     changeHP: changeHP,
 }
+
+
+function countClicks() {
+    let counter = 1;
+    // console.log(counter);
+    return function () {
+        return counter++;
+    }
+
+}
 btn.addEventListener('click', function () {
     console.log('Kick');
     characterDmg = random(20);
@@ -70,13 +82,28 @@ btn.addEventListener('click', function () {
 })
 tacklebtn.addEventListener('click', function () {
     console.log('Tackle');
-    enemyDmg=5;
+    enemyDmg = 5;
     enemy.changeHP(enemyDmg);
 })
+
 function init() {
     console.log('Start Game!');
     character.renderHP;
     enemy.renderHP;
+
+    for (let i = 0; i < btns.length; i++) {
+        const clicks = countClicks();
+
+
+        btns[i].addEventListener('click', () => {      
+          const item = clicks();
+          if (item < 10 ) {
+            console.log('Number of hits ' + item);
+          } else {
+            btns[i].disabled = true;
+          }
+        });
+      }
 
 }
 function random(num) {
@@ -99,5 +126,7 @@ function generateLog(firstPerson, secondPerson, damageDone, hpLeft, hpDefault) {
 
     return logs[random(logs.length) - 1];
 }
+
+
 
 init();
