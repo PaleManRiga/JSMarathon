@@ -1,3 +1,6 @@
+import Pokemon from "./pokemon.js";
+import random from "./utils.js";
+
 const btn = document.getElementById('btn-kick');
 const tacklebtn = document.getElementById('btn-tackle');
 let characterDmg = 0;
@@ -5,66 +8,20 @@ let enemyDmg = 0;
 const btns = document.querySelectorAll('button');
 
 
-function renderProgressbarHP() {
-    this.elProgressbar.style.width = (this.damageHP / this.defaultHP) * 100 + '%'
-}
-
-function renderHPLife() {
-    this.elHP.innerText = this.damageHP + '/' + this.defaultHP;
-}
-
-function renderHP() {
-    this.renderHPLife();
-    this.renderProgressbarHP();
-}
-
-function changeHP(count) {
-    this.damageHP -= count;
-
-    const log = this === enemy ? generateLog(this, character, -enemyDmg, enemy.damageHP, enemy.defaultHP) : generateLog(this, enemy, -characterDmg, character.damageHP, character.defaultHP);
-
-    const $p = document.createElement('p');
-
-    console.log(log);
-    $p.innerText = log;
-
-    const $logs = document.querySelector('#logs');
-
-    $logs.insertBefore($p, $logs.children[0]);
-
-    if (this.damageHP <= count) {
-        this.damageHP = 0;
-        alert('Бедный ' + this.name + ' проиграл бой');
-        btn.disabled = true;
-        tacklebtn.disabled = true;
-    }
-
-    this.renderHP();
-}
-const character = {
+const player1 = new Pokemon({
     name: 'Pikachu',
-    defaultHP: 200,
-    damageHP: 200,
-    elHP: document.getElementById('health-character'),
-    elProgressbar: document.getElementById('progressbar-character'),
-    renderProgressbarHP: renderProgressbarHP,
-    renderHPLife: renderHPLife,
-    renderHP: renderHP,
-    changeHP: changeHP,
-}
-
-const enemy = {
+    type: 'electric',
+    hp: 500,
+    selectors: 'character',
+});
+const player2 = new Pokemon({
     name: 'Charmander',
-    defaultHP: 200,
-    damageHP: 200,
-    elHP: document.getElementById('health-enemy'),
-    elProgressbar: document.getElementById('progressbar-enemy'),
-    renderProgressbarHP: renderProgressbarHP,
-    renderHPLife: renderHPLife,
-    renderHP: renderHP,
-    changeHP: changeHP,
-}
-const btnCountJolt = countClicks(6, btn);
+    type: 'fire',
+    hp: 450,
+    selectors: 'enemy',
+});
+
+const btnCountJolt = countClicks(10, btn);
 const btnCountTackle = countClicks(20, tacklebtn);
 
 function countClicks(count = 6, el) {
@@ -82,41 +39,43 @@ function countClicks(count = 6, el) {
 btn.addEventListener('click', function () {
     console.log('Kick');
     btnCountJolt();
-    characterDmg = random(40, 20);
-    enemyDmg = random(40, 20);
-    character.changeHP(characterDmg);
-    enemy.changeHP(enemyDmg);
+    characterDmg = random(60, 20);
+    enemyDmg = random(60, 20);
+    player1.changeHP(characterDmg, function (count) {
+        console.log(generateLog(player1, player2, count));
+    });
+    player2.changeHP(enemyDmg, function (count) {
+        console.log(generateLog(player2, player1, count))
+    });
+
+    
 })
 tacklebtn.addEventListener('click', function () {
     console.log('Tackle');
     btnCountTackle();
     enemyDmg = 5;
-    enemy.changeHP(enemyDmg);
+    player2.changeHP(enemyDmg);
 })
 
 function init() {
     console.log('Start Game!');
-    character.renderHP;
-    enemy.renderHP;
-
-}
-function random(max, min =0) {
-    const num = max - min;
-    return Math.ceil(Math.random() * num) + min;
 }
 
-function generateLog(firstPerson, secondPerson, damageDone, hpLeft, hpDefault) {
+
+function generateLog(player1, player2, count) {
+    const {name, hp: {current, total }} = player1;
+    const {name: enemyName} = player2;
     const logs = [
-        `${firstPerson.name} вспомнил что-то важное, но неожиданно ${secondPerson.name}, не помня себя от испуга, ударил в предплечье врага. ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} поперхнулся, и за это ${secondPerson.name} с испугу приложил прямой удар коленом в лоб врага. ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} забылся, но в это время наглый ${secondPerson.name}, приняв волевое решение, неслышно подойдя сзади, ударил. ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} пришел в себя, но неожиданно ${secondPerson.name} случайно нанес мощнейший удар. ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} поперхнулся, но в это время ${secondPerson.name} нехотя раздробил кулаком \<вырезанно цензурой\> противника. ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} удивился, а ${secondPerson.name} пошатнувшись влепил подлый удар. ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} высморкался, но неожиданно ${secondPerson.name} провел дробящий удар. ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} пошатнулся, и внезапно наглый ${secondPerson.name} беспричинно ударил в ногу противника ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} расстроился, как вдруг, неожиданно ${secondPerson.name} случайно влепил стопой в живот соперника. ${damageDone}, [${hpLeft} / ${hpDefault}]`,
-        `${firstPerson.name} пытался что-то сказать, но вдруг, неожиданно ${secondPerson.name} со скуки, разбил бровь сопернику. ${damageDone}, [${hpLeft} / ${hpDefault}]`
+        `${name} вспомнил что-то важное, но неожиданно ${enemyName}, не помня себя от испуга, ударил в предплечье врага. -${count}, [${current} / ${total}]`,
+        `${name} поперхнулся, и за это ${enemyName} с испугу приложил прямой удар коленом в лоб врага. -${count}, [${current} / ${total}]`,
+        `${name} забылся, но в это время наглый ${enemyName}, приняв волевое решение, неслышно подойдя сзади, ударил. -${count}, [${current} / ${total}]`,
+        `${name} пришел в себя, но неожиданно ${enemyName} случайно нанес мощнейший удар. -${count}, [${current} / ${total}]`,
+        `${name} поперхнулся, но в это время ${enemyName} нехотя раздробил кулаком \<вырезанно цензурой\> противника. -${count}, [${current} / ${total}]`,
+        `${name} удивился, а ${enemyName} пошатнувшись влепил подлый удар. -${count}, [${current} / ${total}]`,
+        `${name} высморкался, но неожиданно ${enemyName} провел дробящий удар. -${count}, [${current} / ${total}]`,
+        `${name} пошатнулся, и внезапно наглый ${enemyName} беспричинно ударил в ногу противника -${count}, [${current} / ${total}]`,
+        `${name} расстроился, как вдруг, неожиданно ${enemyName} случайно влепил стопой в живот соперника. -${count}, [${current} / ${total}]`,
+        `${name} пытался что-то сказать, но вдруг, неожиданно ${enemyName} со скуки, разбил бровь сопернику. -${count}, [${current} / ${total}]`
     ];
 
     return logs[random(logs.length) - 1];
